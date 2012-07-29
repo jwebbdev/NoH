@@ -98,6 +98,23 @@ public class ExpDAO
 	{
 		// TODO: Load 2 versions of the map a DB version for diff and one that will be changed in runtime
 		// Load Manager's ExpMap from Database
-		
+		MySQL loadMS = _plugin.getMySQL();
+		loadMS.open();
+		ResultSet results = loadMS.query("SELECT * from `noh_experience`");
+		try
+		{
+			while(results.next())
+			{
+				if(!manager.playerExp.containsKey(results.getString("name")))
+					manager.playerExp.put(results.getString("name"), manager.new PlayerData());
+				for(PlayerClass pClass : PlayerClass.values())
+					manager.playerExp.get(results.getString("name")).Experience.put(pClass, results.getInt(tableMap.get(pClass)));
+			}
+		}
+		catch (SQLException e) 
+		{
+			_plugin.getLogger().info("ERROR: In SaveExp");
+		}
+		loadMS.close();
 	}
 }

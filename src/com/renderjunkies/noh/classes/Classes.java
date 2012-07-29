@@ -23,6 +23,10 @@ public class Classes extends JavaPlugin
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(new ExpListener(this),  this);
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
+		this.reloadConfig();
+
 		mysql = new MySQL(getLogger(), getConfig().getString("database.prefix"),getConfig().getString("database.host"),getConfig().getString("database.port"),getConfig().getString("database.dbname"),getConfig().getString("database.username"),getConfig().getString("database.password"));
 
 		mysql.open();
