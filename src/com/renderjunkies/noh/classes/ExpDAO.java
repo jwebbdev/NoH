@@ -83,10 +83,10 @@ public class ExpDAO
 				this._mysql.query("INSERT INTO `noh_experience` (`name`) VALUES ('"+entry.getKey()+"')");
 			}
 			this._mysql.query("UPDATE `noh_experience` SET " +
-					"`"+tableMap.get(PlayerClass.BASE)+"` = "+entry.getValue().Experience.get(PlayerClass.BASE)+" " +
-					"`"+tableMap.get(PlayerClass.RANGER)+"` = "+entry.getValue().Experience.get(PlayerClass.RANGER)+" " +
-					"`"+tableMap.get(PlayerClass.CLERIC)+"` = "+entry.getValue().Experience.get(PlayerClass.CLERIC)+" " +
-					"`"+tableMap.get(PlayerClass.BERSERKER)+"` = "+entry.getValue().Experience.get(PlayerClass.BERSERKER)+" " +
+					"`"+tableMap.get(PlayerClass.BASE)+"` = "+entry.getValue().Experience.get(PlayerClass.BASE)+", " +
+					"`"+tableMap.get(PlayerClass.RANGER)+"` = "+entry.getValue().Experience.get(PlayerClass.RANGER)+", " +
+					"`"+tableMap.get(PlayerClass.CLERIC)+"` = "+entry.getValue().Experience.get(PlayerClass.CLERIC)+", " +
+					"`"+tableMap.get(PlayerClass.BERSERKER)+"` = "+entry.getValue().Experience.get(PlayerClass.BERSERKER)+", " +
 					"`"+tableMap.get(PlayerClass.SWORDSMAN)+"` = "+entry.getValue().Experience.get(PlayerClass.SWORDSMAN)+" " +
 					"WHERE name = '"+entry.getKey()+"'");
 		}
