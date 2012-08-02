@@ -7,7 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.renderjunkies.noh.NoH.PlayerClass;
+import com.renderjunkies.noh.EnumJobs;
 
 public class ExpManager
 {
@@ -16,16 +16,15 @@ public class ExpManager
 
 	public class PlayerData 
 	{
-		Map<PlayerClass, Integer> Experience;
+		Map<EnumJobs, Integer> Experience;
 		
 		public PlayerData()
 		{
-			Experience = new HashMap<PlayerClass, Integer>();
-			Experience.put(PlayerClass.BASE, 0);
-			Experience.put(PlayerClass.RANGER, 0);
-			Experience.put(PlayerClass.CLERIC, 0);
-			Experience.put(PlayerClass.BERSERKER, 0);
-			Experience.put(PlayerClass.SWORDSMAN, 0);
+			Experience = new HashMap<EnumJobs, Integer>();
+			Experience.put(EnumJobs.RANGER, 0);
+			Experience.put(EnumJobs.CLERIC, 0);
+			Experience.put(EnumJobs.BERSERKER, 0);
+			Experience.put(EnumJobs.SWORDSMAN, 0);
 		}
 	}
 	
@@ -56,26 +55,22 @@ public class ExpManager
 		int amount = 0;
 		if(ExpMap.containsKey(monsterType))
 			amount = ExpMap.get(monster.getType());
-		PlayerClass pClass = this._plugin.getClass(player);
+		EnumJobs pClass = EnumJobs.getJob(player);
 		GrantExp(player, pClass, amount);
-		
-		// Always gain BASE class Exp
-		if(pClass != PlayerClass.BASE)
-			GrantExp(player, PlayerClass.BASE, amount);
 	}
 	
-	private void GrantExp(Player player, PlayerClass pClass, int amount)
+	private void GrantExp(Player player, EnumJobs pClass, int amount)
 	{
 		if(!playerExp.containsKey(player.getName()))
 			playerExp.put(player.getName(), new PlayerData());
 		
-		Map<PlayerClass, Integer> pExp = playerExp.get(player.getName()).Experience;
+		Map<EnumJobs, Integer> pExp = playerExp.get(player.getName()).Experience;
 		pExp.put(pClass, pExp.get(pClass)+ amount);
 		
 		player.sendMessage("You just gained "+amount+"XP now you have "+GetExp(player, pClass));
 	}
 	
-	public int GetExp(Player player, PlayerClass pClass)
+	public int GetExp(Player player, EnumJobs pClass)
 	{
 		if(playerExp.containsKey(player.getName()))
 			return playerExp.get(player.getName()).Experience.get(pClass);

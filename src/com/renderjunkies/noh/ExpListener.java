@@ -1,8 +1,5 @@
 package com.renderjunkies.noh;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

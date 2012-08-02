@@ -10,27 +10,40 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.renderjunkies.noh.ExpManager.PlayerData;
-import com.renderjunkies.noh.NoH.PlayerClass;
+import com.renderjunkies.noh.EnumJobs;
 
 import lib.PatPeter.SQLibrary.MySQL;
 
 public class ExpDAO
 {
-	Map<PlayerClass, String> tableMap = null;
+	Map<EnumJobs, String> tableMap = null;
+	public MySQL mysql = null;
 	private MySQL _mysql = null;
 	NoH _plugin = null;
 	public ExpDAO(NoH plugin)
 	{
 		// Creating a new MySQL object so I don't have to worry about Saves blocking the main thread if it wants to do something else.
+		this.mysql = new MySQL(plugin.getLogger(), plugin.getConfig().getString("database.prefix"),plugin.getConfig().getString("database.host"),plugin.getConfig().getString("database.port"),plugin.getConfig().getString("database.dbname"),plugin.getConfig().getString("database.username"),plugin.getConfig().getString("database.password"));
 		this._mysql = new MySQL(plugin.getLogger(), plugin.getConfig().getString("database.prefix"),plugin.getConfig().getString("database.host"),plugin.getConfig().getString("database.port"),plugin.getConfig().getString("database.dbname"),plugin.getConfig().getString("database.username"),plugin.getConfig().getString("database.password"));
 		this._plugin = plugin;
 
-		tableMap = new HashMap<PlayerClass, String>();
-		tableMap.put(PlayerClass.BASE, "base");
-		tableMap.put(PlayerClass.RANGER, "ranger");
-		tableMap.put(PlayerClass.CLERIC, "cleric");
-		tableMap.put(PlayerClass.BERSERKER, "berserker");
-		tableMap.put(PlayerClass.SWORDSMAN, "swordsman");
+		tableMap = new HashMap<EnumJobs, String>();
+		tableMap.put(EnumJobs.RANGER, "ranger");
+		tableMap.put(EnumJobs.CLERIC, "cleric");
+		tableMap.put(EnumJobs.BERSERKER, "berserker");
+		tableMap.put(EnumJobs.SWORDSMAN, "swordsman");
+
+		mysql.open();
+		if(mysql.checkConnection())
+		{
+			CheckTables();
+		}
+		else
+		{
+			_plugin.getLogger().info("Database connection could not be established.");
+		}
+		mysql.close();
+		
 	}
 	
 	public void PlayerExists(Player player)
@@ -38,21 +51,21 @@ public class ExpDAO
 		String playerName = player.getName();
 		
 		ResultSet results;
-		_plugin.getMySQL().open();
-		results = _plugin.getMySQL().query("SELECT * from `noh_experience` WHERE name = '"+playerName+"'");
+		mysql.open();
+		results = mysql.query("SELECT * from `noh_experience` WHERE name = '"+playerName+"'");
 		try
 		{
 			if(!results.next())
 			{
 				// Player doesn't exist yet, need to create.
-				_plugin.getMySQL().query("INSERT INTO `noh_experience` (`name`) VALUES ('"+playerName+"')");
+				mysql.query("INSERT INTO `noh_experience` (`name`) VALUES ('"+playerName+"')");
 			}
 		}
 		catch (SQLException e) 
 		{
 			_plugin.getLogger().info("ERROR: Couldn't create player \""+playerName+"\".");
 		}
-		_plugin.getMySQL().close();
+		mysql.close();
 	}
 	
 	// Only the SaveExp function uses _mysql, and it is synchronized so only calling SaveExp from the main thread should
@@ -83,11 +96,10 @@ public class ExpDAO
 				this._mysql.query("INSERT INTO `noh_experience` (`name`) VALUES ('"+entry.getKey()+"')");
 			}
 			this._mysql.query("UPDATE `noh_experience` SET " +
-					"`"+tableMap.get(PlayerClass.BASE)+"` = "+entry.getValue().Experience.get(PlayerClass.BASE)+", " +
-					"`"+tableMap.get(PlayerClass.RANGER)+"` = "+entry.getValue().Experience.get(PlayerClass.RANGER)+", " +
-					"`"+tableMap.get(PlayerClass.CLERIC)+"` = "+entry.getValue().Experience.get(PlayerClass.CLERIC)+", " +
-					"`"+tableMap.get(PlayerClass.BERSERKER)+"` = "+entry.getValue().Experience.get(PlayerClass.BERSERKER)+", " +
-					"`"+tableMap.get(PlayerClass.SWORDSMAN)+"` = "+entry.getValue().Experience.get(PlayerClass.SWORDSMAN)+" " +
+					"`"+tableMap.get(EnumJobs.RANGER)+"` = "+entry.getValue().Experience.get(EnumJobs.RANGER)+", " +
+					"`"+tableMap.get(EnumJobs.CLERIC)+"` = "+entry.getValue().Experience.get(EnumJobs.CLERIC)+", " +
+					"`"+tableMap.get(EnumJobs.BERSERKER)+"` = "+entry.getValue().Experience.get(EnumJobs.BERSERKER)+", " +
+					"`"+tableMap.get(EnumJobs.SWORDSMAN)+"` = "+entry.getValue().Experience.get(EnumJobs.SWORDSMAN)+" " +
 					"WHERE name = '"+entry.getKey()+"'");
 		}
 		this._mysql.close();
@@ -98,16 +110,15 @@ public class ExpDAO
 	{
 		// TODO: Load 2 versions of the map a DB version for diff and one that will be changed in runtime
 		// Load Manager's ExpMap from Database
-		MySQL loadMS = _plugin.getMySQL();
-		loadMS.open();
-		ResultSet results = loadMS.query("SELECT * from `noh_experience`");
+		mysql.open();
+		ResultSet results = mysql.query("SELECT * from `noh_experience`");
 		try
 		{
 			while(results.next())
 			{
 				if(!manager.playerExp.containsKey(results.getString("name")))
 					manager.playerExp.put(results.getString("name"), manager.new PlayerData());
-				for(PlayerClass pClass : PlayerClass.values())
+				for(EnumJobs pClass : EnumJobs.values())
 					manager.playerExp.get(results.getString("name")).Experience.put(pClass, results.getInt(tableMap.get(pClass)));
 			}
 		}
@@ -115,6 +126,36 @@ public class ExpDAO
 		{
 			_plugin.getLogger().info("ERROR: In SaveExp");
 		}
-		loadMS.close();
+		mysql.close();
+	}
+
+	public boolean CheckTables()
+	{
+		if(mysql.checkTable("noh_experience"))
+			return true;
+		else if(CreateTables())
+			return true;
+		return false;
+	}
+
+	public boolean CreateTables()
+	{
+		try
+		{
+			ResultSet results = mysql.query("CREATE TABLE `noh_experience` (`id` int PRIMARY KEY AUTO_INCREMENT, `name` VARCHAR(16), `ranger` int default 0, `cleric` int default 0, `berserker` int default 0, `swordsman` int default 0)");
+			if(!results.wasNull())
+			{
+				_plugin.getLogger().info("First run: Experience Table Created Successfully.");
+				return true;
+			}
+		}
+		catch (SQLException e) 
+		{
+	        //success = false;
+	    	_plugin.getLogger().info("SQLException: " + e.getMessage());
+	        //e.printStackTrace();
+	    	return false;
+		}
+		return false;
 	}
 }
