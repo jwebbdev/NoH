@@ -1,4 +1,4 @@
-package com.renderjunkies.noh.classes;
+package com.renderjunkies.noh;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,11 +7,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.renderjunkies.noh.classes.Classes.PlayerClass;
+import com.renderjunkies.noh.NoH.PlayerClass;
 
 public class ExpManager
 {
-	Classes _plugin = null;
+	NoH _plugin = null;
 	Map<EntityType, Integer> ExpMap;
 
 	public class PlayerData 
@@ -31,7 +31,7 @@ public class ExpManager
 	
 	Map<String, PlayerData> playerExp = null;
 
-	public ExpManager(Classes plugin)
+	public ExpManager(NoH plugin)
 	{
 		this._plugin = plugin;
 		

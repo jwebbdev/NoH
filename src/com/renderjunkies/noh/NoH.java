@@ -1,4 +1,4 @@
-package com.renderjunkies.noh.classes;
+package com.renderjunkies.noh;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import lib.PatPeter.SQLibrary.MySQL;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Classes extends JavaPlugin
+public class NoH extends JavaPlugin
 {
 	public enum PlayerClass
 	{
@@ -18,7 +18,7 @@ public class Classes extends JavaPlugin
 	private MySQL mysql = null;
 	private ExpDAO ExpDao = null; 
 	private ExpManager ExpMan = null;
-	public final Classes thisClasses = this;
+	public final NoH thisClasses = this;
 	
 	public void onEnable()
 	{
@@ -26,7 +26,7 @@ public class Classes extends JavaPlugin
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		this.reloadConfig();
-
+		
 		mysql = new MySQL(getLogger(), getConfig().getString("database.prefix"),getConfig().getString("database.host"),getConfig().getString("database.port"),getConfig().getString("database.dbname"),getConfig().getString("database.username"),getConfig().getString("database.password"));
 
 		mysql.open();
@@ -107,8 +107,21 @@ public class Classes extends JavaPlugin
 	
 	public PlayerClass getClass(Player player)
 	{
-		// TODO: Parse player's equipment to determine class.
-		return PlayerClass.BASE;
+		int helmetId = player.getInventory().getHelmet().getTypeId();
+		int chestId = player.getInventory().getChestplate().getTypeId();
+		int legId = player.getInventory().getLeggings().getTypeId();
+		int bootId = player.getInventory().getBoots().getTypeId();
+		
+		if(helmetId == 298 && chestId == 299 && legId == 300 && bootId == 301)
+			return PlayerClass.RANGER;
+		if(helmetId == 302 && chestId == 303 && legId == 304 && bootId == 305)
+			return PlayerClass.CLERIC;
+		if(helmetId == 306 && chestId == 307 && legId == 308 && bootId == 309)
+			return PlayerClass.BERSERKER;
+		if(helmetId == 310 && chestId == 311 && legId == 312 && bootId == 313)
+			return PlayerClass.SWORDSMAN;
+		else
+			return PlayerClass.BASE;
 	}
 	
 }

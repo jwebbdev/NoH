@@ -1,4 +1,4 @@
-package com.renderjunkies.noh.classes;
+package com.renderjunkies.noh;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.renderjunkies.noh.classes.Classes.PlayerClass;
-import com.renderjunkies.noh.classes.ExpManager.PlayerData;
+import com.renderjunkies.noh.ExpManager.PlayerData;
+import com.renderjunkies.noh.NoH.PlayerClass;
 
 import lib.PatPeter.SQLibrary.MySQL;
 
@@ -18,8 +18,8 @@ public class ExpDAO
 {
 	Map<PlayerClass, String> tableMap = null;
 	private MySQL _mysql = null;
-	Classes _plugin = null;
-	public ExpDAO(Classes plugin)
+	NoH _plugin = null;
+	public ExpDAO(NoH plugin)
 	{
 		// Creating a new MySQL object so I don't have to worry about Saves blocking the main thread if it wants to do something else.
 		this._mysql = new MySQL(plugin.getLogger(), plugin.getConfig().getString("database.prefix"),plugin.getConfig().getString("database.host"),plugin.getConfig().getString("database.port"),plugin.getConfig().getString("database.dbname"),plugin.getConfig().getString("database.username"),plugin.getConfig().getString("database.password"));

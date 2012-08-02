@@ -1,4 +1,7 @@
-package com.renderjunkies.noh.classes;
+package com.renderjunkies.noh;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,8 +12,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 public class ExpListener implements Listener
 {
-	private final Classes _plugin;
-	public ExpListener(Classes plugin)
+	private final NoH _plugin;
+	public ExpListener(NoH plugin)
 	{
 		this._plugin = plugin;
 	}
@@ -24,7 +27,7 @@ public class ExpListener implements Listener
 			return;
 		
 		Player killer = monster.getKiller();
-		
+				
 		if(killer instanceof Player)
 		{
 			_plugin.getExpManager().PlayerKill(killer, monster);
