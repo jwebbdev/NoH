@@ -17,6 +17,12 @@ public abstract class Job
 	protected String name;
 	protected List<Material> toolList;
 	
+	Job()
+	{
+		toolList = null;
+		weapons = null;
+	}
+	
 	abstract void UseJobTool(Material mat, Action act);
 	abstract void UseJobWeapon(Action act);
 	public boolean IsJobTool(Material mat)
