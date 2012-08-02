@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.renderjunkies.noh.job.Job;
-import com.renderjunkies.noh.job.Ranger;
 
 public class NoH extends JavaPlugin
 {

@@ -6,30 +6,33 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 
-public class Ranger extends Job
+public class Knight extends Job
 {
-	private static Ranger instance = null;
+	private static Knight instance = null;
 	
-	private Ranger()
+	private Knight()
 	{
 		weapons = new ArrayList<Material>();
-		weapons.add(Material.BOW);
+		weapons.add(Material.WOOD_SWORD);
+		weapons.add(Material.STONE_SWORD);
+		weapons.add(Material.IRON_SWORD);
+		weapons.add(Material.DIAMOND_SWORD);
 		helmetMaterial = Material.LEATHER_HELMET;
 		chestplateMaterial = Material.LEATHER_CHESTPLATE;
 		leggingsMaterial = Material.LEATHER_LEGGINGS;
 		bootsMaterial = Material.LEATHER_BOOTS;
 		baseOffense = 1.0f;
 		baseDefense = 1.0f;
-		name = "Ranger";
+		name = "Knight";
 		List<Material> toolList = new ArrayList<Material>();
 		toolList.add(Material.ARROW);
 	}
 
-	public static Ranger getInstance()
+	public static Knight getInstance()
 	{
 		if(instance == null)
 		{
-			instance = new Ranger();
+			instance = new Knight();
 		}
 		return instance;
 	}

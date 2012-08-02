@@ -7,7 +7,7 @@ import org.bukkit.event.block.Action;
 
 public abstract class Job
 {
-	protected Material weaponMaterial;
+	protected List<Material> weapons;
 	protected Material helmetMaterial;
 	protected Material chestplateMaterial;
 	protected Material leggingsMaterial;
@@ -28,7 +28,7 @@ public abstract class Job
 	
 	public boolean IsJobWeapon(Material mat)
 	{
-		if(weaponMaterial == mat)
+		if(weapons.contains(mat))
 			return true;
 		return false;
 	}
