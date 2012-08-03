@@ -3,11 +3,11 @@ package com.renderjunkies.noh;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.renderjunkies.noh.job.Job;
+import com.renderjunkies.noh.job.JobListener;
 
 public class NoH extends JavaPlugin
 {
@@ -19,6 +19,7 @@ public class NoH extends JavaPlugin
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(new ExpListener(this),  this);
+		getServer().getPluginManager().registerEvents(new JobListener(this),  this);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		this.reloadConfig();
@@ -36,6 +37,11 @@ public class NoH extends JavaPlugin
 			}
 		}, 6000L);
 		pJobs = new HashMap<Player, Job>();
+	}
+	
+	public Map<Player, Job> getPlayerJobMap()
+	{
+		return pJobs;
 	}
 	
 	public void onDisable()
