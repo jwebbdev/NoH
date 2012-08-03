@@ -17,6 +17,7 @@ public abstract class Job
 	protected float baseDefense;
 	protected String name;
 	protected List<Material> toolList;
+	protected int maxPower;
 	
 	Job()
 	{

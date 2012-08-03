@@ -27,6 +27,7 @@ public class Knight extends Job
 		bootsMaterial = Material.DIAMOND_BOOTS;
 		baseOffense = 2.0f;
 		baseDefense = 0.75f;
+		maxPower = 100;
 		name = "Knight";
 	}
 
@@ -61,23 +62,52 @@ public class Knight extends Job
 		// Blocking
 		EntityPlayer p = ((CraftPlayer)player).getHandle();
 		
-		if(p.P())
+		// Does the player have enough stamina to block?
+		int staminaNeeded = (int)((float)damage * BlockResistFactor(player));
+		
+		if(player.getLevel() >= staminaNeeded)
 		{
-			player.sendMessage("Blocking");
-			damage = 0;
+			// Player has enough to block, see if they're blocking
+			if(p.P())
+			{
+				player.setLevel(player.getLevel() - staminaNeeded);
+				damage = 0;
+			}
 		}
 		
 		return damage;
 	}
 
 	@Override
-	public int DealDamage(Player player, int damage) {
+	public int DealDamage(Player player, int damage) 
+	{
 		// TODO Auto-generated method stub
 		return damage;
 	}
 
 	@Override
-	public void Update(Player player) {
+	public void Update(Player player) 
+	{
+		if(player.getLevel() < maxPower)
+		{
+			int curLevel = player.getLevel();
+			curLevel += GetIncrement(player);
+			if(curLevel > maxPower)
+				curLevel = maxPower;
+			player.setLevel(curLevel);
+		}
+	}
+	
+	public int GetIncrement(Player player)
+	{
+		return 2;
+	}
+	
+	public float BlockResistFactor(Player player)
+	{
+		// Figure out Player's level and determine how much damage they soak from that
+		// 1.0 = 1 stamina for 1 damage
+		return 5.0f;
 	}
 	
 }
