@@ -34,7 +34,7 @@ public class JobListener implements Listener
 			if(pJobs.get(player).IsJobTool(mat))
 				pJobs.get(player).UseJobTool(mat, act);
 			else if (pJobs.get(player).IsJobWeapon(mat))
-				pJobs.get(player).UseJobWeapon(act);				
+				pJobs.get(player).UseJobWeapon(mat, act);				
 		}
 	}
 }

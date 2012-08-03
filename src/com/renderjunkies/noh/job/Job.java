@@ -24,7 +24,7 @@ public abstract class Job
 	}
 	
 	abstract void UseJobTool(Material mat, Action act);
-	abstract void UseJobWeapon(Action act);
+	abstract void UseJobWeapon(Material mat, Action act);
 	public boolean IsJobTool(Material mat)
 	{
 		if(toolList != null && toolList.contains(mat))

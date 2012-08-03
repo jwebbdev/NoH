@@ -42,7 +42,7 @@ public class Cleric extends Job
 	}
 
 	@Override
-	void UseJobWeapon(Action act) 
+	void UseJobWeapon(Material mat, Action act) 
 	{
 		// TODO Auto-generated method stub
 	}
