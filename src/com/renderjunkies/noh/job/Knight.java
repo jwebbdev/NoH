@@ -2,7 +2,10 @@ package com.renderjunkies.noh.job;
 
 import java.util.ArrayList;
 
+import net.minecraft.server.EntityPlayer;
+
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -45,7 +48,36 @@ public class Knight extends Job
 	@Override
 	void UseJobWeapon(Player player, Material mat, Action act) 
 	{
-		player.sendMessage("Used Job Weapon");		
+		player.sendMessage("Used Job Weapon");
+		if(act == Action.RIGHT_CLICK_AIR || act == Action.RIGHT_CLICK_BLOCK)
+		{
+			// Player is blocking
+		}
+	}
+	
+	@Override
+	public int TakeDamage(Player player, int damage)
+	{
+		// Blocking
+		EntityPlayer p = ((CraftPlayer)player).getHandle();
+		
+		if(p.P())
+		{
+			player.sendMessage("Blocking");
+			damage = 0;
+		}
+		
+		return damage;
+	}
+
+	@Override
+	public int DealDamage(Player player, int damage) {
+		// TODO Auto-generated method stub
+		return damage;
+	}
+
+	@Override
+	public void Update(Player player) {
 	}
 	
 }

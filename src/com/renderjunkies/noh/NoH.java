@@ -3,6 +3,7 @@ package com.renderjunkies.noh;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.renderjunkies.noh.job.Job;
@@ -40,16 +41,33 @@ public class NoH extends JavaPlugin
 
 		pJobs = new HashMap<String, Job>();
 		JobDao.LoadJobs();
+		
+		// Update jobs every 2 seconds (40 ticks)
+		getServer().getScheduler().scheduleSyncRepeatingTask(noh, new Runnable()
+		{
+			public void run()
+			{
+				for(Map.Entry<String,Job> entry : pJobs.entrySet())
+				{
+					if(entry.getValue() != null)
+					{
+						Player p = getServer().getPlayer(entry.getKey());
+						if(p != null) // Make sure player is online
+							entry.getValue().Update(getServer().getPlayer(entry.getKey()));
+					}
+				}
+			}
+		}, 40L, 40L);
 
 		// Run Save every 5 minutes
-		getServer().getScheduler().scheduleAsyncDelayedTask(noh,  new Runnable()
+		getServer().getScheduler().scheduleAsyncRepeatingTask(noh,  new Runnable()
 		{
 			public void run()
 			{
 				noh.ExpDao.SaveExp(ExpMan);
 				noh.JobDao.SaveJobs();
 			}
-		}, 6000L);
+		}, 6000L, 6000L);
 	}
 	
 	public Map<String, Job> getPlayerJobMap()

@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/Vapes/Dropbox/MineCraftPlugins/John/Citizens/libs/bukkit-1.2.5-R1.0.jar"/>
 	<classpathentry kind="lib" path="C:/MCS/lib/SQLibrary.jar"/>
+	<classpathentry kind="lib" path="C:/MCS/craftbukkit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

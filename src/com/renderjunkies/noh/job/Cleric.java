@@ -47,5 +47,23 @@ public class Cleric extends Job
 	{
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public int TakeDamage(Player player, int damage) {
+		// TODO Auto-generated method stub
+		return damage;
+	}
+
+	@Override
+	public int DealDamage(Player player, int damage) {
+		// TODO Auto-generated method stub
+		return damage;
+	}
+
+	@Override
+	public void Update(Player player) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

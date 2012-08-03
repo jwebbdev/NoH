@@ -44,4 +44,8 @@ public abstract class Job
 	{
 		return name;
 	}
+	
+	abstract public int TakeDamage(Player player, int damage);
+	abstract public int DealDamage(Player player, int damage);
+	abstract public void Update(Player player);
 }
