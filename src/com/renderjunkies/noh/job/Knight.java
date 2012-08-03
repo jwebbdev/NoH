@@ -39,16 +39,13 @@ public class Knight extends Job
 	@Override
 	void UseJobTool(Player player, Material mat, Action act) 
 	{
-		// TODO Auto-generated method stub
-		
-		
+		player.sendMessage("Used Job Tool");
 	}
 
 	@Override
 	void UseJobWeapon(Player player, Material mat, Action act) 
 	{
-		// TODO Auto-generated method stub
-		
+		player.sendMessage("Used Job Weapon");		
 	}
 	
 }

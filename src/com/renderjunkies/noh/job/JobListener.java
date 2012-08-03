@@ -22,19 +22,19 @@ public class JobListener implements Listener
 	@EventHandler
 	public void onPlayerInteraction(PlayerInteractEvent event)
 	{
-		if(!event.isBlockInHand())
+		if(event.getItem() == null)
 			return;
 
 		Action act = event.getAction();
 		Material mat = event.getItem().getType();
-		Map<Player,Job> pJobs = _plugin.getPlayerJobMap();
+		Map<String,Job> pJobs = _plugin.getPlayerJobMap();
 		Player player = event.getPlayer();
-		if(pJobs.containsKey(player))
+		if(pJobs.containsKey(player.getName()))
 		{
-			if(pJobs.get(player).IsJobTool(mat))
-				pJobs.get(player).UseJobTool(player, mat, act);
-			else if (pJobs.get(player).IsJobWeapon(mat))
-				pJobs.get(player).UseJobWeapon(player, mat, act);				
+			if(pJobs.get(player.getName()).IsJobTool(mat))
+				pJobs.get(player.getName()).UseJobTool(player, mat, act);
+			else if (pJobs.get(player.getName()).IsJobWeapon(mat))
+				pJobs.get(player.getName()).UseJobWeapon(player, mat, act);		
 		}
 	}
 }

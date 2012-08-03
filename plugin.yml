@@ -1,3 +1,16 @@
-name: NoHClasses
-main: com.renderjunkies.noh.classes.Classes
+name: NoH
+main: com.renderjunkies.noh.NoH
 version: 1.0
+
+commands:
+  knight:
+    description: Sets the player to a Knight
+    usage: /<command>
+    permission: noh.knight
+    permission-message: You don't have <permission>
+    
+
+permissions:
+  knight:
+    description: Allows player to become a knight
+    default: true

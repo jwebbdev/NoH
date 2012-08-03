@@ -39,4 +39,9 @@ public abstract class Job
 			return true;
 		return false;
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
 }
