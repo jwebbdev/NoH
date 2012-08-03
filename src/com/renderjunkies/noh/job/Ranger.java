@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
 public class Ranger extends Job
@@ -36,14 +37,14 @@ public class Ranger extends Job
 	}
 
 	@Override
-	void UseJobTool(Material mat, Action act) 
+	void UseJobTool(Player player, Material mat, Action act) 
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	void UseJobWeapon(Material mat, Action act) 
+	void UseJobWeapon(Player player, Material mat, Action act) 
 	{
 		// TODO Auto-generated method stub
 		

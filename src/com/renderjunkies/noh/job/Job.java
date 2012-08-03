@@ -3,6 +3,7 @@ package com.renderjunkies.noh.job;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
 public abstract class Job
@@ -23,8 +24,8 @@ public abstract class Job
 		weapons = null;
 	}
 	
-	abstract void UseJobTool(Material mat, Action act);
-	abstract void UseJobWeapon(Material mat, Action act);
+	abstract void UseJobTool(Player player, Material mat, Action act);
+	abstract void UseJobWeapon(Player player, Material mat, Action act);
 	public boolean IsJobTool(Material mat)
 	{
 		if(toolList != null && toolList.contains(mat))
