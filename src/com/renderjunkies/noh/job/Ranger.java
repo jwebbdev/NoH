@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -57,7 +58,7 @@ public class Ranger extends Job
 	}
 
 	@Override
-	public int DealDamage(Player player, int damage) {
+	public int DealDamage(Player player, LivingEntity enemy, int damage) {
 		// TODO Auto-generated method stub
 		return damage;
 	}

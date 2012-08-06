@@ -3,35 +3,38 @@ package com.renderjunkies.noh;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
 
 import com.renderjunkies.noh.ExpManager.PlayerData;
-import com.renderjunkies.noh.EnumJobs;
+import com.renderjunkies.noh.job.Berserker;
+import com.renderjunkies.noh.job.Cleric;
+import com.renderjunkies.noh.job.Job;
+import com.renderjunkies.noh.job.Knight;
+import com.renderjunkies.noh.job.Ranger;
 
 import lib.PatPeter.SQLibrary.MySQL;
 
 public class ExpDAO
 {
-	Map<EnumJobs, String> tableMap = null;
 	public MySQL mysql = null;
 	private MySQL _mysql = null;
 	NoH _plugin = null;
+	List<Job> jList = null;
 	public ExpDAO(NoH plugin)
 	{
 		// Creating a new MySQL object so I don't have to worry about Saves blocking the main thread if it wants to do something else.
 		this.mysql = new MySQL(plugin.getLogger(), plugin.getConfig().getString("database.prefix"),plugin.getConfig().getString("database.host"),plugin.getConfig().getString("database.port"),plugin.getConfig().getString("database.dbname"),plugin.getConfig().getString("database.username"),plugin.getConfig().getString("database.password"));
 		this._mysql = new MySQL(plugin.getLogger(), plugin.getConfig().getString("database.prefix"),plugin.getConfig().getString("database.host"),plugin.getConfig().getString("database.port"),plugin.getConfig().getString("database.dbname"),plugin.getConfig().getString("database.username"),plugin.getConfig().getString("database.password"));
 		this._plugin = plugin;
-
-		tableMap = new HashMap<EnumJobs, String>();
-		tableMap.put(EnumJobs.RANGER, "ranger");
-		tableMap.put(EnumJobs.CLERIC, "cleric");
-		tableMap.put(EnumJobs.BERSERKER, "berserker");
-		tableMap.put(EnumJobs.SWORDSMAN, "swordsman");
+		
+		jList = new ArrayList<Job>();
+		jList.add(Ranger.getInstance());
+		jList.add(Knight.getInstance());
+		jList.add(Cleric.getInstance());
+		jList.add(Berserker.getInstance());
 
 		mysql.open();
 		if(mysql.checkConnection())
@@ -96,10 +99,10 @@ public class ExpDAO
 				this._mysql.query("INSERT INTO `noh_experience` (`name`) VALUES ('"+entry.getKey()+"')");
 			}
 			this._mysql.query("UPDATE `noh_experience` SET " +
-					"`"+tableMap.get(EnumJobs.RANGER)+"` = "+entry.getValue().Experience.get(EnumJobs.RANGER)+", " +
-					"`"+tableMap.get(EnumJobs.CLERIC)+"` = "+entry.getValue().Experience.get(EnumJobs.CLERIC)+", " +
-					"`"+tableMap.get(EnumJobs.BERSERKER)+"` = "+entry.getValue().Experience.get(EnumJobs.BERSERKER)+", " +
-					"`"+tableMap.get(EnumJobs.SWORDSMAN)+"` = "+entry.getValue().Experience.get(EnumJobs.SWORDSMAN)+" " +
+					"`"+Ranger.getInstance().getName().toLowerCase()+"` = "+entry.getValue().Experience.get(Ranger.getInstance().getName())+", " +
+					"`"+Cleric.getInstance().getName().toLowerCase()+"` = "+entry.getValue().Experience.get(Cleric.getInstance().getName())+", " +
+					"`"+Berserker.getInstance().getName().toLowerCase()+"` = "+entry.getValue().Experience.get(Berserker.getInstance().getName())+", " +
+					"`"+Knight.getInstance().getName().toLowerCase()+"` = "+entry.getValue().Experience.get(Knight.getInstance().getName())+" " +
 					"WHERE name = '"+entry.getKey()+"'");
 		}
 		this._mysql.close();
@@ -118,8 +121,8 @@ public class ExpDAO
 			{
 				if(!manager.playerExp.containsKey(results.getString("name")))
 					manager.playerExp.put(results.getString("name"), manager.new PlayerData());
-				for(EnumJobs pClass : EnumJobs.values())
-					manager.playerExp.get(results.getString("name")).Experience.put(pClass, results.getInt(tableMap.get(pClass)));
+				for(Job pJob : jList)
+					manager.playerExp.get(results.getString("name")).Experience.put(pJob.getName(), results.getInt(pJob.getName()));
 			}
 		}
 		catch (SQLException e) 
@@ -142,7 +145,7 @@ public class ExpDAO
 	{
 		try
 		{
-			ResultSet results = mysql.query("CREATE TABLE `noh_experience` (`id` int PRIMARY KEY AUTO_INCREMENT, `name` VARCHAR(16), `ranger` int default 0, `cleric` int default 0, `berserker` int default 0, `swordsman` int default 0)");
+			ResultSet results = mysql.query("CREATE TABLE `noh_experience` (`id` int PRIMARY KEY AUTO_INCREMENT, `name` VARCHAR(16), `ranger` int default 0, `cleric` int default 0, `berserker` int default 0, `knight` int default 0)");
 			if(!results.wasNull())
 			{
 				_plugin.getLogger().info("First run: Experience Table Created Successfully.");

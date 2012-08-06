@@ -37,6 +37,21 @@ public class JobCommands implements CommandExecutor
 			return true;
 		}
 		
+		
+		if(cmd.getName().equalsIgnoreCase("xp"))
+		{
+			if(player == null)
+			{
+				sender.sendMessage("This command can only be run by a player.");
+			}
+			else
+			{
+				int exp = _plugin.getExpManager().GetExp(player, _plugin.getPlayerJobMap().get(player.getName()).getName());
+				int level = _plugin.getExpManager().GetLevel(player);
+				player.sendMessage("You have "+exp+"XP and are Level: "+level);
+			}
+			return true;
+		}
 		return false;
 	}
 	

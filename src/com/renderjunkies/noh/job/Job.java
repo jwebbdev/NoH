@@ -3,6 +3,7 @@ package com.renderjunkies.noh.job;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -47,6 +48,6 @@ public abstract class Job
 	}
 	
 	abstract public int TakeDamage(Player player, int damage);
-	abstract public int DealDamage(Player player, int damage);
+	abstract public int DealDamage(Player player, LivingEntity enemy, int damage);
 	abstract public void Update(Player player);
 }

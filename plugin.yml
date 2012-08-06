@@ -3,6 +3,11 @@ main: com.renderjunkies.noh.NoH
 version: 1.0
 
 commands:
+  xp:
+    description: Shows the players current XP
+    usage: /<command>
+    permission: noh.xp
+    permission-message: You don't have <permission>
   knight:
     description: Sets the player to a Knight
     usage: /<command>
@@ -11,6 +16,9 @@ commands:
     
 
 permissions:
-  knight:
+  noh.knight:
     description: Allows player to become a knight
+    default: true
+  noh.xp:
+    description: Allows player to check XP
     default: true

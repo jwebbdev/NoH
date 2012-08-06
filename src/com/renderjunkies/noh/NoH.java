@@ -26,6 +26,7 @@ public class NoH extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new JobListener(this),  this);
 		jCommands = new JobCommands(this);
 		getCommand("knight").setExecutor(jCommands);
+		getCommand("xp").setExecutor(jCommands);
 		
 		
 		this.getConfig().options().copyDefaults(true);
