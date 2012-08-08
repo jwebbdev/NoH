@@ -50,7 +50,6 @@ public class JobListener implements Listener
 			if(edee.getDamager() instanceof Player)
 			{
 				Player damager = (Player) edee.getDamager();
-				damager.sendMessage(event.getCause().name());
 				if(!event.isCancelled())
 					if(_plugin.getPlayerJobMap().containsKey(damager.getName()) && _plugin.getPlayerJobMap().get(damager.getName()) != null)
 						event.setDamage(_plugin.getPlayerJobMap().get(damager.getName()).DealDamage(damager, (LivingEntity)edee.getEntity(), event.getDamage()));

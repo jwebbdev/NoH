@@ -36,7 +36,7 @@ public class ExpManager
 	}
 	
 	Map<String, PlayerData> playerExp = null;
-
+	
 	public ExpManager(NoH plugin)
 	{
 		this._plugin = plugin;

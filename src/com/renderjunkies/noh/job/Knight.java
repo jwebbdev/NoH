@@ -19,6 +19,7 @@ public class Knight extends Job
 	private static Knight instance = null;
 	private Map<String, Long> blockCooldown;
 	private Map<LivingEntity, DoT> bleeding;
+	private Map<String, Integer> attacks;
 	private class DoT
 	{
 		public int duration;
@@ -28,7 +29,7 @@ public class Knight extends Job
 		DoT(Player player, int duration, int damage)
 		{
 			this.player = player;
-			this.duration = duration;
+			this.duration = duration * 20;
 			this.damage = damage;
 			this.started = player.getWorld().getFullTime();
 		}
@@ -52,6 +53,9 @@ public class Knight extends Job
 		name = "Knight";
 		blockCooldown = new HashMap<String, Long>();
 		bleeding = new HashMap<LivingEntity, DoT>();
+		toolList = new ArrayList<Material>();
+		toolList.add(Material.BLAZE_POWDER);
+		attacks = new HashMap<String, Integer>();
 	}
 
 	public static Knight getInstance()
@@ -67,6 +71,11 @@ public class Knight extends Job
 	void UseJobTool(Player player, Material mat, Action act) 
 	{
 		//player.sendMessage("Used Job Tool");
+		if(mat == Material.BLAZE_POWDER)
+		{
+			// Buff!
+			Buffs.getInstance().AddBuff(player, "Immovable Object", 30); // Time in seconds
+		}
 	}
 
 	@Override
@@ -82,10 +91,8 @@ public class Knight extends Job
 	@Override
 	public int TakeDamage(Player player, int damage)
 	{
-		EntityPlayer p = ((CraftPlayer)player).getHandle();
-		
 		// Blocking
-		if(p.P())
+		if(player.isBlocking())
 		{
 			damage = BlockDamage(player, damage);
 		}
@@ -144,6 +151,7 @@ public class Knight extends Job
 	@Override
 	public int DealDamage(Player player, LivingEntity enemy, int damage) 
 	{
+		boolean bSwordAttack = false;
 		// TODO Auto-generated method stub
 		if(player.getItemInHand() != null && IsJobWeapon(player.getItemInHand().getType()))
 		{
@@ -152,17 +160,21 @@ public class Knight extends Job
 			switch(mat)
 			{
 			case WOOD_SWORD:
+				bSwordAttack = true;
 				// Modified = 1.0, do nothing.
 				break;
 			case STONE_SWORD:
+				bSwordAttack = true;
 				// 2.5 -> 4
 				damage *= 1.6f;
 				break;
 			case IRON_SWORD:
+				bSwordAttack = true;
 				// 3.0 -> 6
 				damage *= 2.0f;
 				break;
 			case DIAMOND_SWORD:
+				bSwordAttack = true;
 				// 3.5 -> ~8
 				damage *= 2.3f;
 				break;
@@ -176,8 +188,16 @@ public class Knight extends Job
 		if(damage > 0 && enemy.getNoDamageTicks() < enemy.getMaximumNoDamageTicks() / 2.0f)
 		{
 		 	 IncreasePower(player, GetIncrement(player));
-		 	 // TODO make a way to differentiate between bleed and normal attack so it doesn't get weapon multipliers
-		 	 // InflictDoT(player, enemy, 5, 10);
+		 	 if(bSwordAttack)
+		 	 {
+		 		 if(!attacks.containsKey(player.getName()))
+		 			 attacks.put(player.getName(), 0);
+		 		 attacks.put(player.getName(), attacks.get(player.getName())+1);
+			 	 if(attacks.get(player.getName()) % 5 == 0)
+			 	 {
+				 	 InflictDoT(player, enemy, 10, 10);
+			 	 }
+		 	 }
 		}
 		
 		return damage;
@@ -216,13 +236,23 @@ public class Knight extends Job
 		{
 			if(entry.getValue().player == player)
 			{
-				if(entry.getKey().isDead())
-					removal.add(entry.getKey());
+				LivingEntity e = entry.getKey();
+				if(e.isDead())
+					removal.add(e);
 				else
 				{
-					entry.getKey().damage(entry.getValue().damage, entry.getValue().player);
+					e.damage(entry.getValue().damage);
+					// This is gross, but here's the reasoning:
+					//   The damage function above won't trigger an onDamageEvent which is needed for the TargetingSystem
+					//   to update the HP of the mob, and potentially other plugins.  Also this allows the ExpListener to
+					//   use the LastDamageCause method of the entity to determine who hit it last.  If we passed the entity
+					//   to the damage function with a value, the value would end up getting scaled.  If the leaky issue is
+					//   fixed in CraftBukkit this call will be removed.
+					e.damage(0, player);
+					// If the dot killed the enemy, attribute it to the proper player
+						
 					if(player.getWorld().getFullTime() > entry.getValue().duration + entry.getValue().started)
-						removal.add(entry.getKey());
+						removal.add(e);
 				}
 			}
 		}
@@ -232,8 +262,9 @@ public class Knight extends Job
 		}
 	}
 	
-	public void InflictDoT(Player player, LivingEntity enemy, int damagePer, int duration)
+	public void InflictDoT(Player player, LivingEntity enemy, int damage, int duration)
 	{
+		int damagePer = damage / (duration / 2);
 		bleeding.put(enemy, new DoT(player, duration, damagePer));
 	}
 	

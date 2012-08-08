@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.renderjunkies.noh.job.Buffs;
 import com.renderjunkies.noh.job.Job;
 import com.renderjunkies.noh.job.JobCommands;
 import com.renderjunkies.noh.job.JobDAO;
@@ -19,6 +20,7 @@ public class NoH extends JavaPlugin
 	public final NoH noh = this;
 	private Map<String, Job> pJobs;
 	private JobCommands jCommands;
+	private Buffs playerBuffs = null;
 	
 	public void onEnable()
 	{
@@ -43,6 +45,8 @@ public class NoH extends JavaPlugin
 		pJobs = new HashMap<String, Job>();
 		JobDao.LoadJobs();
 		
+		playerBuffs = Buffs.getInstance();
+		
 		// Update jobs every 2 seconds (40 ticks)
 		getServer().getScheduler().scheduleSyncRepeatingTask(noh, new Runnable()
 		{
@@ -57,6 +61,8 @@ public class NoH extends JavaPlugin
 							entry.getValue().Update(getServer().getPlayer(entry.getKey()));
 					}
 				}
+				// Update buffs on same timer
+				playerBuffs.Update(noh);
 			}
 		}, 40L, 40L);
 

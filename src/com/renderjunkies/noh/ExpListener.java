@@ -1,9 +1,11 @@
 package com.renderjunkies.noh;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
@@ -24,6 +26,15 @@ public class ExpListener implements Listener
 			return;
 		
 		Player killer = monster.getKiller();
+		if(killer == null)
+		{
+			if(monster.getLastDamageCause() instanceof EntityDamageByEntityEvent)
+			{
+				Entity e = ((EntityDamageByEntityEvent)monster.getLastDamageCause()).getDamager();
+				if(e instanceof Player)
+					killer = (Player)e;
+			}
+		}
 				
 		if(killer instanceof Player)
 		{
