@@ -47,7 +47,7 @@ public abstract class Job
 		return name;
 	}
 	
-	abstract public int TakeDamage(Player player, int damage);
-	abstract public int DealDamage(Player player, LivingEntity enemy, int damage);
+	abstract public int TakeDamage(Player player, float damage);
+	abstract public int DealDamage(Player player, LivingEntity enemy, float damage);
 	abstract public void Update(Player player);
 }

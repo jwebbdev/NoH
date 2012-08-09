@@ -67,11 +67,16 @@ public class Knight extends Job
 	@Override
 	void UseJobTool(Player player, Material mat, Action act) 
 	{
-		//player.sendMessage("Used Job Tool");
+		// Blaze Powder is used for buffs
 		if(mat == Material.BLAZE_POWDER)
 		{
-			// Buff!
-			Buffs.getInstance().AddBuff(player, "Immovable Object", 30); // Time in seconds
+			// 30 minute buff, 10% damage reduction
+			Buffs.getInstance().AddBuff(player, "Immovable Object", 1800); // Time in seconds
+			int stackSize = player.getItemInHand().getAmount();
+			if(stackSize > 1)
+				player.getItemInHand().setAmount(stackSize - 1);
+			else
+				player.getInventory().remove(player.getItemInHand());
 		}
 	}
 
@@ -86,18 +91,19 @@ public class Knight extends Job
 	}
 	
 	@Override
-	public int TakeDamage(Player player, int damage)
+	public int TakeDamage(Player player, float damage)
 	{
+		damage = Buffs.getInstance().TakeDamage(player, damage);
 		// Blocking
 		if(player.isBlocking())
 		{
 			damage = BlockDamage(player, damage);
 		}
 		
-		return damage;
+		return (int)damage;
 	}
 	
-	private int BlockDamage(Player player, int damage)
+	private int BlockDamage(Player player, float damage)
 	{
 		if(blockCooldown.containsKey(player.getName()))
 		{
@@ -142,12 +148,14 @@ public class Knight extends Job
 		// Counter the effects of normal blocking by doubling damage, this will be cut back in half by the PlayerEntity class
 		damage *= 2;
 		
-		return damage;
+		return (int)damage;
 	}
 
 	@Override
-	public int DealDamage(Player player, LivingEntity enemy, int damage) 
+	public int DealDamage(Player player, LivingEntity enemy, float damage) 
 	{
+		damage = Buffs.getInstance().DealDamage(player, damage);
+		
 		boolean bSwordAttack = false;
 		// TODO Auto-generated method stub
 		if(player.getItemInHand() != null && IsJobWeapon(player.getItemInHand().getType()))
@@ -197,7 +205,7 @@ public class Knight extends Job
 		 	 }
 		}
 		
-		return damage;
+		return (int)damage;
 	}
 	
 	public void IncreasePower(Player player, int amount)

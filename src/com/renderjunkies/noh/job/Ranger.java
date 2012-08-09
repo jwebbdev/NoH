@@ -52,15 +52,15 @@ public class Ranger extends Job
 	}
 
 	@Override
-	public int TakeDamage(Player player, int damage) {
+	public int TakeDamage(Player player, float damage) {
 		// TODO Auto-generated method stub
-		return damage;
+		return (int)damage;
 	}
 
 	@Override
-	public int DealDamage(Player player, LivingEntity enemy, int damage) {
+	public int DealDamage(Player player, LivingEntity enemy, float damage) {
 		// TODO Auto-generated method stub
-		return damage;
+		return (int)damage;
 	}
 
 	@Override

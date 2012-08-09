@@ -52,7 +52,10 @@ public class JobListener implements Listener
 				Player damager = (Player) edee.getDamager();
 				if(!event.isCancelled())
 					if(_plugin.getPlayerJobMap().containsKey(damager.getName()) && _plugin.getPlayerJobMap().get(damager.getName()) != null)
-						event.setDamage(_plugin.getPlayerJobMap().get(damager.getName()).DealDamage(damager, (LivingEntity)edee.getEntity(), event.getDamage()));
+					{
+						float fd = (float)event.getDamage();
+						event.setDamage(_plugin.getPlayerJobMap().get(damager.getName()).DealDamage(damager, (LivingEntity)edee.getEntity(), fd));
+					}
 			}
 
 			if(edee.getEntity() instanceof Player)
@@ -60,7 +63,10 @@ public class JobListener implements Listener
 				Player receiver = (Player) edee.getEntity();
 				if(!event.isCancelled())
 					if(_plugin.getPlayerJobMap().containsKey(receiver.getName()) && _plugin.getPlayerJobMap().get(receiver.getName()) != null)
-						event.setDamage(_plugin.getPlayerJobMap().get(receiver.getName()).TakeDamage(receiver, event.getDamage()));
+					{
+						float fd = (float)event.getDamage();
+						event.setDamage(_plugin.getPlayerJobMap().get(receiver.getName()).TakeDamage(receiver, fd));
+					}
 			}
 		}
 		else

@@ -85,4 +85,35 @@ public class Buffs
 		player.sendMessage(buffName+" has been applied to you.");
 	}
 	
+	public float DealDamage(Player player, float amount)
+	{
+		return amount;
+	}
+
+	// Buffs processed here modify incoming damage
+	public float TakeDamage(Player player, float amount)
+	{
+		if(playerBuffs.containsKey(player.getName()))
+		{
+			List<Buff> pBuffs = playerBuffs.get(player.getName());
+			if(pBuffs != null)
+			{
+				for(Buff b : pBuffs)
+				{
+					// Immovable Object reduces damage by 10%
+					if(b.buffName == "Immovable Object")
+					{
+						amount *= 0.10f;
+						break;
+					}
+				}
+			}
+		}
+		return amount;
+	}
+	
+	public int UpdatePower(Player player, int power)
+	{
+		return power;
+	}
 }
