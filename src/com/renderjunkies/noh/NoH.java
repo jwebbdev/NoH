@@ -22,6 +22,7 @@ public class NoH extends JavaPlugin
 	private JobCommands jCommands;
 	private Buffs playerBuffs = null;
 	
+	
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(new ExpListener(this),  this);
