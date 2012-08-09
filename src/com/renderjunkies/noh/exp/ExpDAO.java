@@ -1,4 +1,4 @@
-package com.renderjunkies.noh;
+package com.renderjunkies.noh.exp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,8 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.renderjunkies.noh.ExpManager.PlayerData;
+import com.renderjunkies.noh.NoH;
+import com.renderjunkies.noh.exp.ExpManager.PlayerData;
 import com.renderjunkies.noh.job.Berserker;
 import com.renderjunkies.noh.job.Cleric;
 import com.renderjunkies.noh.job.Job;

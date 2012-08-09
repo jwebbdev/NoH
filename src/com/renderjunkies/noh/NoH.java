@@ -6,6 +6,9 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.renderjunkies.noh.exp.ExpDAO;
+import com.renderjunkies.noh.exp.ExpListener;
+import com.renderjunkies.noh.exp.ExpManager;
 import com.renderjunkies.noh.job.Buffs;
 import com.renderjunkies.noh.job.Job;
 import com.renderjunkies.noh.job.JobCommands;
