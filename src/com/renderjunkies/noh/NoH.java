@@ -28,6 +28,7 @@ public class NoH extends JavaPlugin
 	
 	public void onEnable()
 	{
+		getServer().getPluginManager().registerEvents(new GeneralListener(),  this);
 		getServer().getPluginManager().registerEvents(new ExpListener(this),  this);
 		getServer().getPluginManager().registerEvents(new JobListener(this),  this);
 		jCommands = new JobCommands(this);
