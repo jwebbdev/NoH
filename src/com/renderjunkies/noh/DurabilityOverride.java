@@ -75,7 +75,6 @@ public class DurabilityOverride
 		
 		// If the durability of the item went down, that means it got repaired and we need to reset
 		ddata.curDurability += durChange;
-		plugin.getLogger().info(""+ddata.curDurability);
 		
 		int newDur = (int)((ddata.curDurability /ddata.maxDurability) * item.getType().getMaxDurability());
 		newDur = newDur - durChange;
