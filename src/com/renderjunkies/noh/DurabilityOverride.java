@@ -82,7 +82,12 @@ public class DurabilityOverride
 		
 		// Don't want the item to keep breaking client side until it's ready to break for real.
 		if(ddata.curDurability >= ddata.maxDurability)
+		{
 			newDur = item.getType().getMaxDurability();
+			durMap.remove(item);
+			item.setDurability((short)newDur);
+			return;
+		}
 		else if(newDur + durChange >= item.getType().getMaxDurability() - 2)
 			newDur -= 1;
 		item.setDurability((short)newDur);
