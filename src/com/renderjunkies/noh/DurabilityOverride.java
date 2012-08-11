@@ -108,6 +108,11 @@ public class DurabilityOverride
 		case IRON_AXE:
 		case GOLD_AXE:
 		case DIAMOND_AXE:
+		case WOOD_SPADE:
+		case STONE_SPADE:
+		case IRON_SPADE:
+		case GOLD_SPADE:
+		case DIAMOND_SPADE:
 		case BOW:
 			maxDur = 1000.0f;
 			break;
