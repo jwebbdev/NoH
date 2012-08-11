@@ -161,6 +161,7 @@ public class Knight extends Job
 		if(player.getItemInHand() != null && IsJobWeapon(player.getItemInHand().getType()))
 		{
 			Material mat = player.getItemInHand().getType();
+			mat.getMaxDurability();
 			
 			switch(mat)
 			{

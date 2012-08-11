@@ -8,7 +8,10 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
@@ -17,9 +20,11 @@ import org.bukkit.inventory.ItemStack;
 public class GeneralListener implements Listener
 {
 	Map<String, List<ItemStack>> dropMap;
+	NoH plugin;
 	
-	public GeneralListener()
+	public GeneralListener(NoH plugin)
 	{
+		this.plugin = plugin;
 		dropMap = new HashMap<String, List<ItemStack>>();
 	}
 	
@@ -90,9 +95,39 @@ public class GeneralListener implements Listener
 			for(ItemStack iStack : dropMap.get(player.getName()))
 			{
 				pInv.addItem(iStack);
+				plugin.dOver.removeItem(iStack);
 			}
 			dropMap.remove(player.getName());
 			player.sendMessage("You made it back to town, but your gear has been damaged and you dropped your loot.");
+		}
+	}
+	
+	// For DurabilityOverrides
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEntityDamageEvent(EntityDamageEvent e)
+	{
+		if(e.getEntity() instanceof Player)
+		{
+			Player p = (Player)e.getEntity();
+			for(ItemStack i : p.getInventory().getArmorContents())
+			{
+				plugin.dOver.adjustDurability(i, e);
+			}
+		}
+		if(e instanceof EntityDamageByEntityEvent)
+		{
+			if(((EntityDamageByEntityEvent)e).getDamager() instanceof Player)
+			{
+				Player p = (Player)((EntityDamageByEntityEvent)e).getDamager();
+				if(p.getItemInHand() != null && p.getItemInHand().getType().getMaxDurability() != 0)
+				{
+					plugin.dOver.adjustDurability(p.getItemInHand(), e);
+				}
+				else if (p.getItemInHand() != null)
+				{
+					plugin.getLogger().info("Item's Durability is "+p.getItemInHand().getType().getMaxDurability());
+				}
+			}
 		}
 	}
 	

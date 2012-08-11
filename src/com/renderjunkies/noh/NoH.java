@@ -24,11 +24,12 @@ public class NoH extends JavaPlugin
 	private Map<String, Job> pJobs;
 	private JobCommands jCommands;
 	private Buffs playerBuffs = null;
+	public DurabilityOverride dOver = null;
 	
 	
 	public void onEnable()
 	{
-		getServer().getPluginManager().registerEvents(new GeneralListener(),  this);
+		getServer().getPluginManager().registerEvents(new GeneralListener(this),  this);
 		getServer().getPluginManager().registerEvents(new ExpListener(this),  this);
 		getServer().getPluginManager().registerEvents(new JobListener(this),  this);
 		jCommands = new JobCommands(this);
@@ -43,6 +44,7 @@ public class NoH extends JavaPlugin
 		ExpDao = new ExpDAO(this);
 		ExpMan = new ExpManager(this);
 		ExpDao.LoadExp(ExpMan);
+		dOver = new DurabilityOverride(this);
 
 		// Create the Job Hashmap, then load it up from the database
 		JobDao = new JobDAO(this);
